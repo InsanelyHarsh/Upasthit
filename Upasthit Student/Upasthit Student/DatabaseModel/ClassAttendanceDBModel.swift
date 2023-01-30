@@ -10,6 +10,7 @@ import RealmSwift
 
 
 class ClassAttendanceDBModel:Object,ObjectKeyIdentifiable{
+    @Persisted(primaryKey: true) var _id:ObjectId
     @Persisted var date:Date
 
     @Persisted var attendanceRecord:List<StudentRecordDBModel>
@@ -19,7 +20,7 @@ class ClassAttendanceDBModel:Object,ObjectKeyIdentifiable{
 
 
 class StudentRecordDBModel:Object,ObjectKeyIdentifiable{
-    @Persisted(primaryKey: true) var id:ObjectId
+    @Persisted(primaryKey: true) var _id:ObjectId
 
     @Persisted var isPresent:Bool = false
     @Persisted var email:String

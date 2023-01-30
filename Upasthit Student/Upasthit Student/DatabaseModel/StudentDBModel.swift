@@ -10,7 +10,7 @@ import RealmSwift
 
 //MARK: Access StudentModel by Email
 class StudentDBModel:Object,ObjectKeyIdentifiable{
-    @Persisted(primaryKey: true) var id:ObjectId //Primary Key
+    @Persisted(primaryKey: true) var _id:ObjectId //Primary Key
 
     @Persisted var studentName:String
     @Persisted var email:String
@@ -19,7 +19,7 @@ class StudentDBModel:Object,ObjectKeyIdentifiable{
     ///Inverse Relationship with Course
     ///- Each Course have many Student
     ///- Each Student have many Courses
-    @Persisted(originProperty: "enrolledStudentData") var courses:LinkingObjects<CourseDBModel>
+//    @Persisted(originProperty: "enrolledStudentData") var courses:LinkingObjects<CourseDBModel>
 
     @Persisted var batch:String
     @Persisted var branch:String

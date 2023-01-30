@@ -17,7 +17,7 @@ protocol RealmManagerDelegate{
 }
 
 final class RealmManager{
-    let app:App
+//    let app:App
     var user:User?
     var config:Realm.Configuration?
     var realm:Realm?
@@ -26,21 +26,21 @@ final class RealmManager{
     var delegate:RealmManagerDelegate?
     
     init(){
-        app = App(id: "realm-basics-swiftui-tpmjz")
+//        app = App(id: "upasthit-yisar")
     }
     
     //Step 01 : Login User
-    func authUser() async { //TODO: Replace anonymous Method
-        do{
-            self.user = try await app.login(credentials: .anonymous)
-            print("Auth Done!")
-        }catch(let err){
-            print("User Login Failed!")
-            print("Error: \(err)\n\n")
-            
-            self.delegate?.didAuthenticationFailed()
-        }
-        await configurationSetup()
+    func authUser()  async{ //TODO: Replace anonymous Method
+//        do{
+//            self.user = try await app.login(credentials: .anonymous)
+//            print("Auth Done!")
+//        }catch(let err){
+//            print("User Login Failed!")
+//            print("Error: \(err)\n\n")
+//            
+//            self.delegate?.didAuthenticationFailed()
+//        }
+         await configurationSetup()
     }
     
     //Step 02 : Set Flexible Sync Configuration
@@ -67,31 +67,39 @@ final class RealmManager{
         self.config = user.flexibleSyncConfiguration(initialSubscriptions: { _ in //No Initial Configuration
             return
         }, rerunOnOpen: false)
-        
+
         guard let config = config else {
             self.delegate?.didConfigurationErrorOccured()
             return
         }
         
-        await launchRealm(with: config)
+//        await launchRealm(with: config)
     }
     
     //Step 03 : Init Realm and Add Subs(Can add subs on step02 also)
-    @MainActor
-    func launchRealm(with config:Realm.Configuration?)async{
-        do{
-            self.realm = try await  Realm(configuration: config!, downloadBeforeOpen: .never)
-            
-            print("Realm Launched!")
-            self.delegate?.didRealmLauched(value: true)
-            if(realm?.subscriptions.count == 0){
-                await self.addSubcription(ItemModel(), name: "ITEM_MODEL_SUBSCRIPTION")
-                await self.addSubcription(GroupModel(), name: "GROUP_MODEL_SUBSCRIPTION")
+//    @MainActor
+    func launchRealm(with config:Realm.Configuration?){
+//        do{
+//            self.realm = try await  Realm(configuration: config!, downloadBeforeOpen: .never)
+//
+//            print("Realm Launched!")
+//            self.delegate?.didRealmLauched(value: true)
+//            if(realm?.subscriptions.count == 0){
+////                await self.addSubcription(CourseDBModel(), name: "ITEM_MODEL_SUBSCRIPTION")
+////                await self.addSubcription(StudentDBModel(), name: "GROUP_MODEL_SUBSCRIPTION")
+//            }
+//        }catch(let error){
+//            print("Realm Failed! \n Error:\(error)")
+//            self.delegate?.didRealmFailedToLauch(error)
+//        }
+        
+            do{
+                self.realm = try Realm()
+                self.delegate?.didRealmLauched(value: true)
+            }catch{
+                Logger.logError("Error while opening Realm DB. \(error.localizedDescription)")
+                print("Error: ", error)
             }
-        }catch(let error){
-            print("Realm Failed! \n Error:\(error)")
-            self.delegate?.didRealmFailedToLauch(error)
-        }
     }
     
     
@@ -119,8 +127,8 @@ final class RealmManager{
 extension RealmManager{
     ///Fetch Data Function returns Array of Frozen Values
     func fetchData<T:Object>(_ type:T.Type)->[T]{
-
         guard let dbRef = realm else { return [] }
+        
         let result = dbRef.freeze().objects(T.self) //frozen Result
         return result.compactMap{$0}
     }
@@ -128,11 +136,12 @@ extension RealmManager{
 
     
     func add<T:Object>(_ item: T) {
-        
         guard let dbRef = realm else { return }
         do{ //TODO: try async?
             try dbRef.write({ //Only non-frozen Values
                 dbRef.add(item)
+                print("writen")
+                print(self.fetchData(CourseDBModel.self))
             })
         }catch(let error){
             print("Error While Adding Item: \(T.Type.self)")
@@ -142,34 +151,4 @@ extension RealmManager{
     }
     
     //TODO: Add Update Function
-}
-
-
-
-
-final class GroupModel:Object,ObjectKeyIdentifiable{
-    @Persisted(primaryKey: true) var _id:ObjectId
-    
-    @Persisted var groupTitle:String
-    @Persisted var items = List<ItemModel>() //Array of ItemModel
-    
-    convenience init(groupTitle:String){
-        self.init()
-        self.groupTitle = groupTitle
-    }
-}
-
-final class ItemModel:Object,ObjectKeyIdentifiable{
-    
-    @Persisted(primaryKey: true) var _id:ObjectId
-    @Persisted var name:String
-    @Persisted var isFav:Bool = false
-    
-    
-    @Persisted(originProperty: "items") var groupModel:LinkingObjects<GroupModel>
-    
-    convenience init(name:String){
-        self.init()
-        self.name = name
-    }
 }

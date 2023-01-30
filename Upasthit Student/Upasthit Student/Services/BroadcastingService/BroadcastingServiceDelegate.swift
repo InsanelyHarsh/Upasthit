@@ -18,7 +18,8 @@ protocol BroadcastingServiceDelegate{
     func didSubcribedTeacherDevice() //
     func didUnSubcribedTeacherDevice()
     
-    func didReviceResponse(_ response:String) //
+    //    func didReviceResponse(_ response:String)
+    func didReviceResponse(_ response:Bool) //
     
 //    func broadcastingServiceProgressDescription(_ description:String)
 }

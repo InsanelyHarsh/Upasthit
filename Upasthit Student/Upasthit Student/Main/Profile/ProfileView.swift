@@ -16,18 +16,26 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                Form{
-                    Section {
-                        LabeledContent("Name") {
-                            Text("\(profileVM.studentName)")
+                if(profileVM.student == nil){
+                    ProgressView("Fetching Profile Details")
+                }else{                
+                    Form{
+                        Section {
+                            LabeledContent("Name", value: profileVM.student!.studentName)
+                            LabeledContent("Roll Number", value: profileVM.student!.rollNumber)
+                            LabeledContent("Institute Email", value: profileVM.student!.email)
+                        } header: {
+                            Text("Credentials")
                         }
-//                        LabeledContent("Name", value: profileVM.ss)
-                        LabeledContent("Institute Email", value: profileVM.email)
-                    } header: {
-                        Text("Credentials")
+                        Section{
+                            LabeledContent("Batch", value: profileVM.student!.batch)
+                            LabeledContent("Branch", value: profileVM.student!.branch)
+                        }
                     }
-                    
                 }
+            }
+            .onAppear{
+                self.profileVM.fetchCredentials()
             }
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)

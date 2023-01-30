@@ -12,20 +12,20 @@ struct EditProfileView: View {
     @EnvironmentObject var profileVM:ProfileViewModel
     var body: some View {
         VStack{
-            TextField("Name", text: $profileVM.studentName)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Insitute Email", text: $profileVM.email)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Roll Number", text: $profileVM.rollNumber)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Batch", text: $profileVM.batch)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Branch", text: $profileVM.branch)
-                .textFieldStyle(.roundedBorder)
+//            TextField("Name", text: $profileVM.studentName)
+//                .textFieldStyle(.roundedBorder)
+//            
+//            TextField("Insitute Email", text: $profileVM.email)
+//                .textFieldStyle(.roundedBorder)
+//            
+//            TextField("Roll Number", text: $profileVM.rollNumber)
+//                .textFieldStyle(.roundedBorder)
+//            
+//            TextField("Batch", text: $profileVM.batch)
+//                .textFieldStyle(.roundedBorder)
+//            
+//            TextField("Branch", text: $profileVM.branch)
+//                .textFieldStyle(.roundedBorder)
             
             
             Button {

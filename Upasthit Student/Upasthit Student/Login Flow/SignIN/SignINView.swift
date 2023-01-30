@@ -9,10 +9,11 @@ import Foundation
 import SwiftUI
 
 struct SignINView: View {
-    @ObservedObject var signinVM:SignINViewModel = SignINViewModel()
+    @ObservedObject var signinVM:SignupViewModel = SignupViewModel()
     @EnvironmentObject var loginFlowRouter:LoginFlowRouteManager
     @State var isSecured:Bool = true
     @State var isConfirmSecured:Bool = true
+    @State var val:Double = 2020
     let action:()->Void
     
     init(action: @escaping () -> Void) {
@@ -32,14 +33,31 @@ struct SignINView: View {
                         .textFieldStyle(.roundedBorder)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                }
+                
+                VStack{
+                    TextField("Roll Number", text: $signinVM.name)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    Slider(value: $val, in: (2019...2025), step: 1) {
+                        Text("Label")
+                    } minimumValueLabel: {
+                        Text("Batch")
+                    } maximumValueLabel: {
+                        Text("\(Int(val).description)")
+                    } onEditingChanged: { _ in
+                        
+                    }
                 }
 
                 VStack(spacing: 10){
                     PasswordFieldView(isSecured: $isSecured, password: $signinVM.password, title: "Password")
                     
                     PasswordFieldView(isSecured: $isConfirmSecured, password: $signinVM.confirmPassword, title: "Confirm")
-                }
-                
+                        
+                }.textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                 
                 VStack{
                     //TODO: Department Field
@@ -51,7 +69,6 @@ struct SignINView: View {
                         }.tint(.purple)
                     }
                 }
-                
             }
 
             

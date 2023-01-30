@@ -53,9 +53,11 @@ struct AttendanceDetailView: View {
         .navigationTitle("Mark Attendance")
         .navigationBarTitleDisplayMode(.inline)
         
-        .alert(self.attendanceDetailVM.alertMessage, isPresented: $attendanceDetailVM.showAlert) {
+        .alert(self.attendanceDetailVM.alertType.alertTitle, isPresented: $attendanceDetailVM.showAlert, actions: {
             
-        }
+        }, message: {
+            Text(self.attendanceDetailVM.alertType.alertDescription)
+        })
         .onChange(of: self.attendanceDetailVM.attendanceCompleted) { newValue in
             if(newValue){
                 self.attendanceMarkedAction()

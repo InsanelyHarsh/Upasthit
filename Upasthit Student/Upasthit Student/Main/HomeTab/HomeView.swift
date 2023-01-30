@@ -6,17 +6,23 @@
 //
 
 import SwiftUI
+//import RealmSwift
 
 struct HomeView: View {
     
-    @StateObject var courseManager:CourseDetailManager = CourseDetailManager()
+//    @StateObject var courseManager:CourseDetailManager = CourseDetailManager()
+    @StateObject var homeVM:HomeViewModel = HomeViewModel()
     
     var body: some View {
-        VStack{
+//        ScrollView(.vertical, showsIndicators: false){
+//            if(self.homeVM.registeredCourseList.count == 0){
+//                Text("No Registered Courses")
+//            }
             //MARK: Registered Courses
             Form{
                 Section {
-                    ForEach(courseManager.registeredCourses, id: \.id) { course in
+//                    Text("...^")
+                    ForEach(homeVM.registeredCourseList, id: \.id) { course in
                         NavigationLink(value: course) {
                             Text("\(course.courseName)")
                         }
@@ -25,12 +31,12 @@ struct HomeView: View {
                     Text("Registered courses")
                 }
             }
-        }
+//        }
         .onAppear{
-            self.courseManager.getCourseList() //Fetch Course List
+            self.homeVM.getCourseList() //Fetch Course List
         }
-        .navigationDestination(for: CourseDetailModel.self, destination: { course in
-            CourseDetailView(course: course)
+        .navigationDestination(for: CourseDBModel.self, destination: { course in
+            CourseDetailView(registeredCourse: course)
         })
     }
 }

@@ -6,35 +6,48 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct CourseDetailView: View {
-    let course:CourseDetailModel
+    var registeredCourse:CourseDBModel
     var body: some View {
         VStack{
-//            Text(course.courseName)
+//            Text(registeredCourse.courseName)
             Form {
-                Section("Couse Code \(course.courseCode)") {
+                Section("Couse Code \(registeredCourse.courseCode)") {
                     List {
-                        CourseDetailItem(heading: "Instructor", headingValue: course.courseInstructor)
+
+                        CourseDetailItem(heading: "Course", headingValue: registeredCourse.courseName)
+                        LabeledContent("Department", value: registeredCourse.department)
                         
-                        CourseDetailItem(heading: "Course", headingValue: course.courseName)
+                        LabeledContent("Credit", value: registeredCourse.courseCredit)
                         
-                        CourseDetailItem(heading: "Semestor", headingValue: course.sem)
+                        LabeledContent("Course Year", value: registeredCourse.courseYear)
+                        CourseDetailItem(heading: "Semestor", headingValue: registeredCourse.courseSemester)
+                        
+                        LabeledContent("Instructor") {
+                            if(registeredCourse.instructors.isEmpty){
+                                Text("None")
+                            }else{
+                                Text("\(registeredCourse.instructors[0].teacherName)")
+                            }
+                        }
+                        LabeledContent("Description", value: registeredCourse.courseDescription)
                     }
                 }
             }
 
         }
-        .navigationTitle(course.courseName)
+        .navigationTitle(registeredCourse.courseName)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-struct CourseDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        CourseDetailView(course: .init(courseInstructor: "Dr. Abhishek Verma", courseName: "Software Defined Networking", courseCode: "OE304", sem: "5", year: "2022"))
-    }
-}
+//struct CourseDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CourseDetailView(course: .init(courseInstructor: "Dr. Abhishek Verma", courseName: "Software Defined Networking", courseCode: "OE304", sem: "5", year: "2022"))
+//    }
+//}
 
 struct CourseDetailItem: View {
     let heading:String

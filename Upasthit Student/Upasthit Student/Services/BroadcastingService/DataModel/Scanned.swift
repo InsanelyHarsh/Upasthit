@@ -9,6 +9,6 @@ import Foundation
 
 
 struct ScannedServiceDataModel:Decodable{
-    let validPIN:Bool
+    let validPIN:Bool //TODO: Remove this field
     let markedAttendance:Bool
 }

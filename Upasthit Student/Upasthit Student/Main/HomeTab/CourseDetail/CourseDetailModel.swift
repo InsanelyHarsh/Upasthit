@@ -7,14 +7,17 @@
 
 import Foundation
 
-struct CourseDetailModel:Identifiable,Hashable{
-    let id = UUID()
-    
-    let courseInstructor:String
-    
-    let courseName:String
-    let courseCode:String
-    
-    let sem:String
-    let year:String
-}
+//TODO: Not in Use, Might Delete
+/*
+ struct CourseDetailModel:Identifiable,Hashable{
+ let id = UUID()
+ 
+ let courseInstructor:String
+ 
+ let courseName:String
+ let courseCode:String
+ 
+ let sem:String
+ let year:String
+ }
+ */

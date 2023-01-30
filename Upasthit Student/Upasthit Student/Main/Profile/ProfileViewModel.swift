@@ -7,22 +7,16 @@
 
 import Foundation
 class ProfileViewModel:ObservableObject{
-//    var realm = RealmManager.shared.realm
+    let realmManager = RealmManager.shared
     
-    //studentName
-    @Published var studentName:String = "Harsh Mohan Yadav"
-    @Published var email:String = "20bec043@iiitdmj.ac.in"
-    @Published var rollNumber:String = "20BEC043"
-    @Published var batch:String = "2020"
-    @Published var branch:String = Branch.ece.branchName
+    @Published var student:StudentDBModel?
     
-    
-    ///Fetch Student Profile Data from Database
+    ///Fetching Student Profile Data from Database
     func fetchCredentials(){
-        //fetch
+        self.student = self.realmManager.fetchData(StudentDBModel.self)[0]
     }
     
+    //TODO: update changes
     func updateCredentails(){
-        //update changes
     }
 }

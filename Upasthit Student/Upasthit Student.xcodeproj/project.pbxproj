@@ -62,6 +62,14 @@
 		B0107BE42984D2BD00D9BADB /* AttendanceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BE32984D2BD00D9BADB /* AttendanceDetailViewModel.swift */; };
 		B0107BE72984D32600D9BADB /* Scanned.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BE62984D32600D9BADB /* Scanned.swift */; };
 		B0107BE92984D33000D9BADB /* Broadcasted.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BE82984D33000D9BADB /* Broadcasted.swift */; };
+		B0107BEB2984E92700D9BADB /* SignInResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BEA2984E92700D9BADB /* SignInResponseModel.swift */; };
+		B0107BED2984E94200D9BADB /* SignInRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BEC2984E94200D9BADB /* SignInRequestModel.swift */; };
+		B0107BEF2984EBF100D9BADB /* RealmHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BEE2984EBF100D9BADB /* RealmHandler.swift */; };
+		B0107BF12987871E00D9BADB /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF02987871E00D9BADB /* HomeViewModel.swift */; };
+		B0107BF3298788D600D9BADB /* CourseDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF2298788D600D9BADB /* CourseDetailViewModel.swift */; };
+		B0107BF529878D0700D9BADB /* TeacherDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF429878D0700D9BADB /* TeacherDBModel.swift */; };
+		B0107BF92987E17D00D9BADB /* AttendanceDetailAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */; };
+		B0107BFB2987ED7300D9BADB /* EnrolledStudentDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +127,14 @@
 		B0107BE32984D2BD00D9BADB /* AttendanceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceDetailViewModel.swift; sourceTree = "<group>"; };
 		B0107BE62984D32600D9BADB /* Scanned.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanned.swift; sourceTree = "<group>"; };
 		B0107BE82984D33000D9BADB /* Broadcasted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Broadcasted.swift; sourceTree = "<group>"; };
+		B0107BEA2984E92700D9BADB /* SignInResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponseModel.swift; sourceTree = "<group>"; };
+		B0107BEC2984E94200D9BADB /* SignInRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInRequestModel.swift; sourceTree = "<group>"; };
+		B0107BEE2984EBF100D9BADB /* RealmHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmHandler.swift; sourceTree = "<group>"; };
+		B0107BF02987871E00D9BADB /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		B0107BF2298788D600D9BADB /* CourseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailViewModel.swift; sourceTree = "<group>"; };
+		B0107BF429878D0700D9BADB /* TeacherDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDBModel.swift; sourceTree = "<group>"; };
+		B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceDetailAlertError.swift; sourceTree = "<group>"; };
+		B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolledStudentDBModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				B0107B7D2984C75300D9BADB /* RootView.swift */,
+				B0107BEE2984EBF100D9BADB /* RealmHandler.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -269,6 +286,8 @@
 			children = (
 				B0107BAD2984CB9600D9BADB /* SignINView.swift */,
 				B0107BAF2984CB9E00D9BADB /* SignINViewModel.swift */,
+				B0107BEA2984E92700D9BADB /* SignInResponseModel.swift */,
+				B0107BEC2984E94200D9BADB /* SignInRequestModel.swift */,
 			);
 			path = SignIN;
 			sourceTree = "<group>";
@@ -311,8 +330,9 @@
 		B0107BB72984CD5400D9BADB /* HomeTab */ = {
 			isa = PBXGroup;
 			children = (
-				B0107BD92984D22500D9BADB /* CourseDetail */,
 				B0107BB82984CD5F00D9BADB /* HomeView.swift */,
+				B0107BF02987871E00D9BADB /* HomeViewModel.swift */,
+				B0107BD92984D22500D9BADB /* CourseDetail */,
 			);
 			path = HomeTab;
 			sourceTree = "<group>";
@@ -328,9 +348,9 @@
 		B0107BBB2984CDB000D9BADB /* AttendanceTab */ = {
 			isa = PBXGroup;
 			children = (
-				B0107BDA2984D23300D9BADB /* AttendanceDetail */,
 				B0107BBC2984CDE900D9BADB /* MarkAttendanceView.swift */,
 				B0107BBE2984CDFE00D9BADB /* MarkAttendanceViewModel.swift */,
+				B0107BDA2984D23300D9BADB /* AttendanceDetail */,
 			);
 			path = AttendanceTab;
 			sourceTree = "<group>";
@@ -351,6 +371,8 @@
 				B0107BCC2984D0A300D9BADB /* StudentDBModel.swift */,
 				B0107BCE2984D0B100D9BADB /* CourseDBModel.swift */,
 				B0107BD02984D0C100D9BADB /* ClassAttendanceDBModel.swift */,
+				B0107BF429878D0700D9BADB /* TeacherDBModel.swift */,
+				B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */,
 			);
 			path = DatabaseModel;
 			sourceTree = "<group>";
@@ -372,6 +394,7 @@
 				B0107BDB2984D25000D9BADB /* CourseDetailManager.swift */,
 				B0107BDD2984D25B00D9BADB /* CourseDetailModel.swift */,
 				B0107BDF2984D26200D9BADB /* CourseDetailView.swift */,
+				B0107BF2298788D600D9BADB /* CourseDetailViewModel.swift */,
 			);
 			path = CourseDetail;
 			sourceTree = "<group>";
@@ -381,6 +404,7 @@
 			children = (
 				B0107BE12984D2AD00D9BADB /* AttendanceDetailView.swift */,
 				B0107BE32984D2BD00D9BADB /* AttendanceDetailViewModel.swift */,
+				B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */,
 			);
 			path = AttendanceDetail;
 			sourceTree = "<group>";
@@ -471,10 +495,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0107BEF2984EBF100D9BADB /* RealmHandler.swift in Sources */,
 				B0107B862984C78800D9BADB /* OnBoardingCustomLayoutView.swift in Sources */,
 				B0107BA62984CA2F00D9BADB /* Authenticator.swift in Sources */,
 				B0107BD42984D1E400D9BADB /* BroadcastingService.swift in Sources */,
+				B0107BED2984E94200D9BADB /* SignInRequestModel.swift in Sources */,
 				B0107B8B2984C86A00D9BADB /* LoginFlowManager.swift in Sources */,
+				B0107BF3298788D600D9BADB /* CourseDetailViewModel.swift in Sources */,
 				B0107B822984C77000D9BADB /* OnBoardingManager.swift in Sources */,
 				B0107B8D2984C87600D9BADB /* MainLoginView.swift in Sources */,
 				B0107BC12984CE3300D9BADB /* SettingsView.swift in Sources */,
@@ -491,6 +518,9 @@
 				B0107BC42984CE6800D9BADB /* ProfileView.swift in Sources */,
 				B0107BE72984D32600D9BADB /* Scanned.swift in Sources */,
 				B0107BCF2984D0B100D9BADB /* CourseDBModel.swift in Sources */,
+				B0107BEB2984E92700D9BADB /* SignInResponseModel.swift in Sources */,
+				B0107BFB2987ED7300D9BADB /* EnrolledStudentDBModel.swift in Sources */,
+				B0107BF12987871E00D9BADB /* HomeViewModel.swift in Sources */,
 				B0107BDE2984D25B00D9BADB /* CourseDetailModel.swift in Sources */,
 				B0107BAE2984CB9600D9BADB /* SignINView.swift in Sources */,
 				B0107B912984C89800D9BADB /* LoginAlerts.swift in Sources */,
@@ -512,6 +542,7 @@
 				B0107BE02984D26200D9BADB /* CourseDetailView.swift in Sources */,
 				B0107BA12984C9C400D9BADB /* NetworkingService.swift in Sources */,
 				B0107B772984C50900D9BADB /* RouteManager.swift in Sources */,
+				B0107BF529878D0700D9BADB /* TeacherDBModel.swift in Sources */,
 				B0107BC62984CE7F00D9BADB /* ProfileViewModel.swift in Sources */,
 				B0107B9C2984C96000D9BADB /* LoginRequestModel.swift in Sources */,
 				B0107BCD2984D0A300D9BADB /* StudentDBModel.swift in Sources */,
@@ -521,6 +552,7 @@
 				B0107B7C2984C54A00D9BADB /* Constants.swift in Sources */,
 				B0107BDC2984D25000D9BADB /* CourseDetailManager.swift in Sources */,
 				B0107BA82984CAC300D9BADB /* Divider.swift in Sources */,
+				B0107BF92987E17D00D9BADB /* AttendanceDetailAlertError.swift in Sources */,
 				B0107BE92984D33000D9BADB /* Broadcasted.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,6 +686,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Upasthit Student";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Give Bluetooth Permission. \\n Required for Marking Attendance Process";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -687,6 +720,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Upasthit Student";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Give Bluetooth Permission. \\n Required for Marking Attendance Process";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

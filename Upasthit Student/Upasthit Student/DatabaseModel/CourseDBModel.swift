@@ -10,7 +10,7 @@ import RealmSwift
 
 //TODO: department
 class CourseDBModel:Object,ObjectKeyIdentifiable{
-    @Persisted(primaryKey: true) var id:ObjectId
+    @Persisted(primaryKey: true) var _id:ObjectId
     
     @Persisted var courseName:String
     @Persisted var courseCode:String
@@ -25,7 +25,7 @@ class CourseDBModel:Object,ObjectKeyIdentifiable{
     
     @Persisted var department:String //Added New
     
-//    @Persisted var instructors:List<TeacherModel> //Basic Detail
-//    @Persisted var enrolledStudentData:List<EnrolledStudentDataModel> 
+    @Persisted var instructors:List<TeacherDBModel> //Basic Detail
+    @Persisted var enrolledStudentData:List<EnrolledStudentDBModel> //
     @Persisted var courseAttendance:List<ClassAttendanceDBModel> //Only of Own
 }

@@ -24,7 +24,31 @@ enum BroadcastingServiceProgressDescription:String{
 
 
 
-enum BroadcastingServiceErrorDescription:String, Error{
-    case bluetoothIsTurnedOff = "Turn on Bluetooth."
-    case broadcastingError = "Error Occured while Broadcasting, Please try Again. ⚠️"
+enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
+    case bluetoothIsTurnedOff
+    case readingResponseFailed
+    case broadcastingError
+    
+    var alertTitle: String{
+        switch self {
+        case .bluetoothIsTurnedOff:
+            return "Turn on Bluetooth"
+        case .readingResponseFailed:
+            return "Error"
+        case .broadcastingError:
+            return "Error"
+        }
+    }
+    
+    var alertDescription: String{
+        switch self {
+        case .bluetoothIsTurnedOff:
+            return "Grant Permission & Turn on Bluetooth \n To Mark Attendance"
+        case .broadcastingError:
+            return "Error Occured while Broadcasting, Please try Again. ⚠️ \n Contact Developer."
+        case .readingResponseFailed:
+            return "Unable to Read Response. \n Please Try Again."
+        }
+    }
+    
 }

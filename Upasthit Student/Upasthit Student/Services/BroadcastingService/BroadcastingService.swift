@@ -22,17 +22,20 @@ class BroadcastingService:NSObject{
     var progressDescription:((Result<BroadcastingServiceProgressDescription,BroadcastingServiceErrorDescription>)->Void)?
     var delegate:BroadcastingServiceDelegate?
     
+    
+    
     override init(){
         super.init()
         self.scannedDeviceManager = CBPeripheralManager(delegate: self, queue: nil)
     }
 
     
+    //MARK: - Start Broadcasting & Stop Broadcasting
     
     //Start Broadcasting
     ///This function starts BLE Broadcasting. By default it broadcast  [Constants.SERVICE_UUID]
     ///Roll Number is the name of Device
-    func startBroadcasting(of services:[CBUUID] = [Constants.SERVICE_UUID],rollNumber:String){
+    func startBroadcasting(of services:[CBUUID] = [Constants.SERVICE_UUID],rollNumber:String){ //MARK: roll works and Broadcasting Name!
         if(!self.scannedDeviceManager.isAdvertising){
             
             if(scannedDeviceManager.state == .poweredOn){
@@ -62,22 +65,31 @@ class BroadcastingService:NSObject{
         self.delegate?.didStopBroadcasting()
         self.progressDescription?(.success(.broadcastingStopped))
     }
+}
+
+
+
+//MARK: - Send Data
+extension BroadcastingService{
     
-    
-    
-    //MARK: Send Data
+    //NOTE: Sending Data to Subcribed Central Devices. Will be Handled by VM,not Broadcasting Service Class
     ///Send Data after Teacher device is connected and Subscribed.
-    func sendData(data dataBroadcasted:BroadcastedDataModel,for characteristic:CBMutableCharacteristic,to centrals:[CBCentral]?){
+    ///Previous Arg: ,for characteristic:CBMutableCharacteristic,to centrals:[CBCentral]?
+    func sendData(data dataBroadcasted:BroadcastedDataModel){
         //Encoding Data
-        guard let encodedBroadcastData = encodeData(dataBroadcasted) else{ return }
+        guard let encodedBroadcastData = encodeData(dataBroadcasted) else{
+            self.progressDescription?(.failure(.broadcastingError)) //TODO: More Clear Msg
+            return
+        }
         
         //Sending Updated Data
-        self.scannedDeviceManager.updateValue(encodedBroadcastData, for: characteristic, onSubscribedCentrals: centrals)
+//        self.scannedDeviceManager.updateValue(encodedBroadcastData, for: characteristic, onSubscribedCentrals: centrals)
+        
+        self.scannedDeviceManager.updateValue(encodedBroadcastData, for: self.charactertic!, onSubscribedCentrals: self.subscribedCentrals)
         
         self.progressDescription?(.success(.checkingCredentails))
     }
 }
-
 
 
 
@@ -105,39 +117,70 @@ extension BroadcastingService:CBPeripheralManagerDelegate{
             self.delegate?.didUpdateState(newState: "Unknown State")
         }
     }
-    
-    
-    
-    
-    
-    
+
     
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         guard error == nil else{
             self.progressDescription?(.failure(.broadcastingError))
             return
         }
+        
         self.delegate?.didStartBroadcasting()
         self.progressDescription?(.success(.broadcastingStarted))
     }
     
     
     
+    //TODO: You can then implement this delegate method to resend the value.
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
 //        self.sendData(for: self.charactertic!, to: subscribedCentrals)
         //
     }
     
+ 
     
     
-    
-    
-    
+    //Did Write
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
+        
+        self.progressDescription?(.success(.readingTeacherResponse))
+        
+        for request in requests{
+            guard let data = request.value else {
+                return
+            }
+//            self.delegate?.didReviceResponse("Congrats your Attendance has been Marked 🥳.\n Look What Teacher send: \(String(data: data, encoding: .utf8) ?? "nil")")
+            
+            do{
+                //Decoding Response
+                let decodedResponse = try JSONDecoder().decode(ScannedServiceDataModel.self, from: data)
+
+                self.delegate?.didReviceResponse(decodedResponse.markedAttendance)
+            }catch{
+                print("TODO: Handle this error")
+                self.progressDescription?(.failure(.readingResponseFailed))
+            }
+
+            
+            Logger.logMessage("Recieved Write on \(request.characteristic.uuid)")
+            Logger.logMessage("Central: \(request.central.identifier)")
+            Logger.logMessage("Data: \(String(data: data, encoding: .utf8) ?? "nil")")
+            Logger.logLine()
+        }
+    }
+}
+
+
+
+//MARK: - Subcribe & Unsubscribe Central Device
+extension BroadcastingService{
     
     //Did Subscribe
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         
         self.subscribedCentrals.append(central)
+        
+        //Sending Data handled by VM
 //        self.sendData(for: self.charactertic!, to: [central])
         
         self.delegate?.didSubcribedTeacherDevice()
@@ -153,46 +196,6 @@ extension BroadcastingService:CBPeripheralManagerDelegate{
         Logger.logMessage("Unsubcribed to \(central.identifier)")
         self.delegate?.didUnSubcribedTeacherDevice()
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    //Did Write
-    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
-        self.progressDescription?(.success(.readingTeacherResponse))
-        for i in requests{
-            guard let data = i.value else {
-                return
-            }
-//            self.delegate?.didReviceResponse("Congrats your Attendance has been Marked 🥳.\n Look What Teacher send: \(String(data: data, encoding: .utf8) ?? "nil")")
-            
-            do{
-                let d = try JSONDecoder().decode(ScannedServiceDataModel.self, from: data)
-                if(d.markedAttendance){
-                    self.delegate?.didReviceResponse("Congrats your Attendance has been Marked 🥳")
-                }else{
-                    self.delegate?.didReviceResponse("❌ Invalid PIN, Try Again!")
-                }
-            }catch{
-                print("TODO: Handle this error")//TODO: More Neat
-            }
-
-            
-            Logger.logMessage("Recieved Write on \(i.characteristic.uuid)")
-            Logger.logMessage("Central: \(i.central.identifier)")
-            Logger.logMessage("Data: \(String(data: data, encoding: .utf8) ?? "nil")")
-            Logger.logLine()
-            
-            //TODO: check response and then stop Broadcasting..
-            Logger.logMessage("Stopping Broadcasting")
-            self.stopBroadcasting()
-            Logger.logLine()
-        }
-    }
 }
 
 
@@ -200,12 +203,7 @@ extension BroadcastingService:CBPeripheralManagerDelegate{
 
 
 
-
-
-
-
-
-
+//MARK: - Utility Methods
 extension BroadcastingService{
     
     /*
@@ -214,7 +212,6 @@ extension BroadcastingService{
         Char -- UUID
      */
     private func createService(with charID:CBUUID,of serviceID:CBUUID) {
-
         
         //Creating Characteristic,using Data that have to be broadcasted
         let broadcastCharacteristic = self.createCharacteristic(with: charID)
@@ -231,6 +228,7 @@ extension BroadcastingService{
     }
     
     
+    
     private func encodeData<T:Encodable>(_ data:T)->Data?{
         let encoder = JSONEncoder()
         do{
@@ -239,6 +237,8 @@ extension BroadcastingService{
             return nil
         }
     }
+    
+    
     
     private func createCharacteristic(with id:CBUUID,data:BroadcastedDataModel? = nil)->CBMutableCharacteristic{
         return CBMutableCharacteristic(type: id,

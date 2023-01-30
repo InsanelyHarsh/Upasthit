@@ -17,7 +17,7 @@ struct MarkAttendanceView: View {
         VStack{
             Rectangle()
                 .cornerRadius(8)
-                .frame(height: UIScreen.main.bounds.height*0.55)
+                .frame(height: UIScreen.main.bounds.height*0.45)
                 .padding()
                 .foregroundColor(.gray)
                 .overlay {
