@@ -83,7 +83,7 @@ class AttendanceDetailViewModel:ObservableObject{
     
     ///Sends Data every 1 second, time could to changed
     var count = 0
-    func sendData(_ interval:Double=5,confrimationResponse:Bool){
+    func sendData(_ interval:Double=2,confrimationResponse:Bool){
         print("Sending Data: \(count)")
         count += 1
         if(confrimationResponse){
@@ -95,10 +95,10 @@ class AttendanceDetailViewModel:ObservableObject{
     
     @objc private func broadcastDataWithConfirmationResponse(){
         if(self.attendanceCompleted){
-            print("Broadcasting Data ☢️ with Confrimation Respone 🍬")
             timer?.invalidate()
         }else{
             if(self.didStudentEnterPIN){
+                print("Broadcasting Data ☢️ with Confrimation Respone 🍬")
                 self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
                                                                              rollNumber: self.studentRollNumber,
                                                                              pin: self.attendancePIN, confirmationResponse: true))
@@ -108,10 +108,10 @@ class AttendanceDetailViewModel:ObservableObject{
     
     @objc private func broadcastDataWithoutConfirmationResponse(){
         if(self.attendanceCompleted){
-            print("Broadcasting Data ☢️ without Confrimation Response ⛄︎")
             timer?.invalidate()
         }else{
             if(self.didStudentEnterPIN){
+                print("Broadcasting Data ☢️ without Confrimation Response ⛄︎")
                 self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
                                                                              rollNumber: self.studentRollNumber,
                                                                              pin: self.attendancePIN, confirmationResponse: false))
@@ -119,6 +119,9 @@ class AttendanceDetailViewModel:ObservableObject{
         }
     }
 
+    private func stopSending(){
+        self.timer?.invalidate()
+    }
     
     func checkPIN(){
         if(self.attendancePIN.count != 4){
@@ -202,7 +205,8 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     
     func didUnSubcribedTeacherDevice() {
         //TODO: Stop Broadcasting..
-        
+        self.stopSending()
+//        self.attendanceCompleted = true //MARK: -Attendance is Marked
         self.broadcastingService.stopBroadcasting()
     }
 }
