@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct CourseDetailView: View {
+    @StateObject var courseDetailVM:CourseDetailViewModel = CourseDetailViewModel()
     var registeredCourse:CourseDBModel
     var body: some View {
         VStack{
@@ -35,8 +36,34 @@ struct CourseDetailView: View {
                         LabeledContent("Description", value: registeredCourse.courseDescription)
                     }
                 }
+                
+                
+                ForEach(self.courseDetailVM.attendanceRecord,id:\._id) { record in
+                    Section(record.date.formatted(date: .abbreviated, time: .shortened)) {
+                        List{
+                            ForEach(record.attendanceRecord,id:\._id){ x in
+                                VStack(alignment: .leading){
+                                    LabeledContent {
+                                        Text(x.isPresent ? "Present" : "Absent")
+                                        .foregroundColor(x.isPresent ? .green : .red)
+                                    } label: {
+                                        Text("Attendance")
+//                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    Text("\(x.logStatus)")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        
 
+        }
+        .onAppear{
+            self.courseDetailVM.getAttendance(of: registeredCourse._id)
         }
         .navigationTitle(registeredCourse.courseName)
         .navigationBarTitleDisplayMode(.inline)

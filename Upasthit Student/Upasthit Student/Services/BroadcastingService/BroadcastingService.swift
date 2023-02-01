@@ -149,13 +149,12 @@ extension BroadcastingService:CBPeripheralManagerDelegate{
             guard let data = request.value else {
                 return
             }
-//            self.delegate?.didReviceResponse("Congrats your Attendance has been Marked 🥳.\n Look What Teacher send: \(String(data: data, encoding: .utf8) ?? "nil")")
             
             do{
                 //Decoding Response
                 let decodedResponse = try JSONDecoder().decode(ScannedServiceDataModel.self, from: data)
-
-                self.delegate?.didReviceResponse(decodedResponse.markedAttendance)
+                print("Decoded Response: \(decodedResponse)")
+                self.delegate?.didReviceResponse(decodedResponse)
             }catch{
                 print("TODO: Handle this error")
                 self.progressDescription?(.failure(.readingResponseFailed))

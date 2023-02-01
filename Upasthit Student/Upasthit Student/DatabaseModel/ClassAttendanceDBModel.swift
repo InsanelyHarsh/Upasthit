@@ -19,6 +19,7 @@ class ClassAttendanceDBModel:Object,ObjectKeyIdentifiable{
 
 
 
+//Record of Each Student
 class StudentRecordDBModel:Object,ObjectKeyIdentifiable{
     @Persisted(primaryKey: true) var _id:ObjectId
 
@@ -26,5 +27,5 @@ class StudentRecordDBModel:Object,ObjectKeyIdentifiable{
     @Persisted var email:String
     @Persisted var logStatus:String
 
-    @Persisted var timeOfAttendane:Date
+    @Persisted var timeOfAttendane:Date //Time of Attendance of Each Student
 }

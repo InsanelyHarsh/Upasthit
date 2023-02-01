@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var sessionManager:SessionManager
     @State var showAlert:Bool = false
+    let realmManager:RealmManager = RealmManager.shared
     var body: some View {
         VStack{
             Form {
@@ -41,6 +42,7 @@ struct SettingsView: View {
                       primaryButton: .cancel(),
                       secondaryButton: .destructive(Text("Yes"), action: {
                     withAnimation {
+                        self.realmManager.deleteEveryThing()
                         self.sessionManager.didCurrentStateUpdated(to: .loggedOut)
                         
 //                        self.sessionManager.signOut()

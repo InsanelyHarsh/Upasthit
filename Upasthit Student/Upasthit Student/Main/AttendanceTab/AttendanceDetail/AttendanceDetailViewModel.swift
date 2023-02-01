@@ -10,7 +10,7 @@ import Combine
 import CoreBluetooth
 
 class AttendanceDetailViewModel:ObservableObject{
-    private let realmManager:RealmManager = RealmManager.shared
+    let realmManager:RealmManager = RealmManager.shared
     private let broadcastingService:BroadcastingService = BroadcastingService()
     var timer:Timer?
     
@@ -82,26 +82,43 @@ class AttendanceDetailViewModel:ObservableObject{
     }
     
     ///Sends Data every 1 second, time could to changed
-    func sendData(_ interval:Double=2){
-        timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(automationFunction), userInfo: nil, repeats: true)
+    var count = 0
+    func sendData(_ interval:Double=5,confrimationResponse:Bool){
+        print("Sending Data: \(count)")
+        count += 1
+        if(confrimationResponse){
+            timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(broadcastDataWithConfirmationResponse), userInfo: nil, repeats: true)
+        }else{
+            timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(broadcastDataWithoutConfirmationResponse), userInfo: nil, repeats: true)
+        }
     }
     
-    @objc private func automationFunction(){
+    @objc private func broadcastDataWithConfirmationResponse(){
         if(self.attendanceCompleted){
-            print("Broadcasting Data ☢️")
+            print("Broadcasting Data ☢️ with Confrimation Respone 🍬")
             timer?.invalidate()
         }else{
             if(self.didStudentEnterPIN){
                 self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
                                                                              rollNumber: self.studentRollNumber,
-                                                                             pin: self.attendancePIN))
-                
-//                self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: "InsanelyHarsh", rollNumber: "20BEC043", pin: self.attendancePIN),
-//                                                  for: self.broadcastingService.charactertic!,
-//                                                  to: self.broadcastingService.subscribedCentrals)
+                                                                             pin: self.attendancePIN, confirmationResponse: true))
             }
         }
     }
+    
+    @objc private func broadcastDataWithoutConfirmationResponse(){
+        if(self.attendanceCompleted){
+            print("Broadcasting Data ☢️ without Confrimation Response ⛄︎")
+            timer?.invalidate()
+        }else{
+            if(self.didStudentEnterPIN){
+                self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
+                                                                             rollNumber: self.studentRollNumber,
+                                                                             pin: self.attendancePIN, confirmationResponse: false))
+            }
+        }
+    }
+
     
     func checkPIN(){
         if(self.attendancePIN.count != 4){
@@ -114,19 +131,48 @@ class AttendanceDetailViewModel:ObservableObject{
 }
 
 extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
-    func didReviceResponse(_ response: Bool) {
-        if(response){
-            self.broadcastingService.stopBroadcasting()
-            Logger.logMessage("Stopping Broadcasting")
-            
-            
-//            realmManager.add(<#T##item: T##T#>)
-            self.attendanceCompleted = true
-            //TODO: Save Response to DB, Here.....
-        }else{
-            //TODO: Save Response & Failure Reason!
-            
-        }
+    
+    //Save Response to DB   Send Data Again
+    //TODO: If recieved Response then Send Data Again with confirmationResponse => True
+    func didReviceResponse(_ response: ScannedServiceDataModel) {
+        //Save Response to DB
+        
+        
+        
+        
+        //Send Confirmation Response, until Disconected
+        self.sendData(confrimationResponse: true)
+        
+        
+        
+        
+        //Show Student Response, Attendance State (Marked or Not Marked)
+        //TODO: Show Alert is User Entered Wrong PIN and Give option to enter pin!
+        
+//        guard let dbRef = self.realmManager.realm else{
+//            return
+//        }
+//
+//        let course = dbRef.objects(CourseDBModel.self).filter{ $0.serviceUUID == "759aabaf-1ffa-4e7b-b511-1dd267e066b3"}[0]
+//        do{
+//            try dbRef.write {
+//                let attendance = ClassAttendanceDBModel()
+//                let record = StudentRecordDBModel()
+//
+//                record.isPresent = response.markedAttendance
+//                record.email = "20bec043@iiitdmj.ac.in" //TODO: Fetch from DB
+//                record.logStatus = response.markedAttendance ? "Marked Successfully" : "Wrong PIN" //TODO: progress description?
+//                record.timeOfAttendane = Date.now
+//
+//                attendance.attendanceRecord.append(record)
+//                attendance.date = Date.now
+//
+//                course.courseAttendance.append(attendance)
+//            }
+//        }catch(let e){
+//            print(e)
+//            print("Error While Saving Record!")
+//        }
     }
     
 //    func broadcastingServiceProgressDescription(_ description: String) {
@@ -143,6 +189,7 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     
     func didStopBroadcasting() {
         self.isBroadcasting = false
+        self.attendanceCompleted = true //MARK: -Attendance is Marked
     }
     
     func didUpdateState(newState: String) {
@@ -150,10 +197,12 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     }
     
     func didSubcribedTeacherDevice() {
-        sendData()
+        sendData(confrimationResponse: false)
     }
     
     func didUnSubcribedTeacherDevice() {
         //TODO: Stop Broadcasting..
+        
+        self.broadcastingService.stopBroadcasting()
     }
 }

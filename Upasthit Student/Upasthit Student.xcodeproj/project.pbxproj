@@ -70,6 +70,7 @@
 		B0107BF529878D0700D9BADB /* TeacherDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF429878D0700D9BADB /* TeacherDBModel.swift */; };
 		B0107BF92987E17D00D9BADB /* AttendanceDetailAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */; };
 		B0107BFB2987ED7300D9BADB /* EnrolledStudentDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */; };
+		B0107BFD2988015D00D9BADB /* GetStudentDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BFC2988015D00D9BADB /* GetStudentDetailModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,6 +136,7 @@
 		B0107BF429878D0700D9BADB /* TeacherDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDBModel.swift; sourceTree = "<group>"; };
 		B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceDetailAlertError.swift; sourceTree = "<group>"; };
 		B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolledStudentDBModel.swift; sourceTree = "<group>"; };
+		B0107BFC2988015D00D9BADB /* GetStudentDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStudentDetailModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +363,7 @@
 				B0107BC32984CE6800D9BADB /* ProfileView.swift */,
 				B0107BC52984CE7F00D9BADB /* ProfileViewModel.swift */,
 				B0107BC72984CE9600D9BADB /* EditProfileView.swift */,
+				B0107BFC2988015D00D9BADB /* GetStudentDetailModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -536,6 +539,7 @@
 				B0107B9E2984C96600D9BADB /* LoginResponseModel.swift in Sources */,
 				B0107B802984C76500D9BADB /* OnBoardingView.swift in Sources */,
 				B0107BB22984CBC600D9BADB /* Department.swift in Sources */,
+				B0107BFD2988015D00D9BADB /* GetStudentDetailModel.swift in Sources */,
 				B0107BC82984CE9600D9BADB /* EditProfileView.swift in Sources */,
 				B0107B932984C8C500D9BADB /* CustomErrorAlertProtocol.swift in Sources */,
 				B0107B842984C77A00D9BADB /* OnBoardingItem.swift in Sources */,

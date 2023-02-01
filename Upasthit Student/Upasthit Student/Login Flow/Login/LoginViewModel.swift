@@ -19,7 +19,7 @@ class LoginViewModel:ObservableObject{
     
     let authenticator = Authenticator.shared
     let networkingService = NetworkingService()
-//    let realmManager = RealmManager.shared
+    let realmManager = RealmManager.shared
     
     @Published var isLoading:Bool = false
     var validPass:Bool{
@@ -61,22 +61,9 @@ class LoginViewModel:ObservableObject{
 //        }
 //    }
     
-//    private func saveTeacherDetails(data:GetTeacherDetailsModel)async{
-//        do{
-//            try await MainActor.run {
-//                let teacher = TeacherModel()
-//                teacher.teacherName = data.teacher!.name
-//                teacher.email = data.teacher!.email
-//                teacher.teacherDescription = data.teacher!.description
-//
-//                try self.realmManager.addNewItem(teacher)
-//                self.isLoading = false
-//            }
-//        }catch(_){
-//            print("Fuckkkk")
-//            //TODO: Handle Errors.
-//        }
-//    }
+    private func saveStudentDetail(data:GetStudentDetailModel)async{
+        //
+    }
     
     func login() async{
         if(self.validEmail && self.validPass){

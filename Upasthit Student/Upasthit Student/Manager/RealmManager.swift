@@ -121,6 +121,16 @@ final class RealmManager{
             print("Error: \(error) \n\n")
         }
     }
+    
+    func deleteEveryThing(){
+        guard let realm = realm else {
+//             throw RealmManagerError.realmFailed
+            return
+        }
+        try! realm.write({
+            realm.deleteAll()
+        })
+    }
 }
 
 
