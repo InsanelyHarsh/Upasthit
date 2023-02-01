@@ -19,7 +19,8 @@ class AttendanceDetailViewModel:ObservableObject{
     @Published var progressDescription:String = "Idle"
     @Published var bluetoothState:String = "Fetching..."
     
-    @Published var attendanceCompleted:Bool = false
+    @Published var attendanceProcessCompleted:Bool = false
+    @Published var attendanceMarkedSucessfully:Bool = false
     
     @Published var attendancePIN:String = ""
     @Published var didStudentEnterPIN:Bool = false
@@ -31,18 +32,21 @@ class AttendanceDetailViewModel:ObservableObject{
     
     private var studentRollNumber:String{
         get{
-            return self.realmManager.fetchData(StudentDBModel.self).map{ $0.rollNumber}[0]
+//            return self.realmManager.fetchData(StudentDBModel.self).map{ $0.rollNumber}[0]
+            return "20bec043"
         }
     }
     
     private var registeredCourseServiceIDs:[CBUUID]{
         get{
-            return self.realmManager.fetchData(CourseDBModel.self).map{ CBUUID(string: $0.serviceUUID) }
+//            return self.realmManager.fetchData(CourseDBModel.self).map{ CBUUID(string: $0.serviceUUID) }
+            return [Constants.SERVICE_UUID]
         }
     }
     private var studentName:String{
         get{
-            return self.realmManager.fetchData(StudentDBModel.self).map{ $0.studentName}.first!
+//            return self.realmManager.fetchData(StudentDBModel.self).map{ $0.studentName}.first!
+            return "Harsh"
         }
     }
     
@@ -94,8 +98,8 @@ class AttendanceDetailViewModel:ObservableObject{
     }
     
     @objc private func broadcastDataWithConfirmationResponse(){
-        if(self.attendanceCompleted){
-            timer?.invalidate()
+        if(self.attendanceProcessCompleted){
+            stopSending()
         }else{
             if(self.didStudentEnterPIN){
                 print("Broadcasting Data ☢️ with Confrimation Respone 🍬")
@@ -107,8 +111,8 @@ class AttendanceDetailViewModel:ObservableObject{
     }
     
     @objc private func broadcastDataWithoutConfirmationResponse(){
-        if(self.attendanceCompleted){
-            timer?.invalidate()
+        if(self.attendanceProcessCompleted){
+            stopSending()
         }else{
             if(self.didStudentEnterPIN){
                 print("Broadcasting Data ☢️ without Confrimation Response ⛄︎")
@@ -131,51 +135,57 @@ class AttendanceDetailViewModel:ObservableObject{
             self.didStudentEnterPIN = true
         }
     }
+    
+    
+    
+    private func saveAttendanceRecord(responseData:ScannedServiceDataModel){
+        guard let dbRef = self.realmManager.realm else{
+            return
+        }
+        
+        let course = dbRef.objects(CourseDBModel.self).filter{ $0.serviceUUID == "759aabaf-1ffa-4e7b-b511-1dd267e066b3"}[0]
+        do{
+            try dbRef.write {
+                let attendance = ClassAttendanceDBModel()
+                let record = StudentRecordDBModel()
+                
+                record.isPresent = responseData.markedAttendance
+                record.email = "20bec043@iiitdmj.ac.in" //TODO: Fetch from DB
+                record.logStatus = responseData.markedAttendance ? "Marked Successfully" : "Wrong PIN" //TODO: progress description?
+                record.timeOfAttendane = Date.now
+                
+                attendance.attendanceRecord.append(record)
+                attendance.date = Date.now
+                
+                course.courseAttendance.append(attendance)
+            }
+        }catch(let e){
+            print(e)
+            print("Error While Saving Record!")
+        }
+    }
 }
 
 extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     
     //Save Response to DB   Send Data Again
-    //TODO: If recieved Response then Send Data Again with confirmationResponse => True
+    //If recieved Response then Send Data Again with confirmationResponse => True
     func didReviceResponse(_ response: ScannedServiceDataModel) {
         //Save Response to DB
-        
-        
-        
+        saveAttendanceRecord(responseData: response)
         
         //Send Confirmation Response, until Disconected
+        if(response.markedAttendance == false){
+            self.showAlert = true
+            self.alertType = AttendanceDetailAlertError.wrongPIN
+        }else{
+            self.attendanceMarkedSucessfully = true
+        }
+        
         self.sendData(confrimationResponse: true)
-        
-        
-        
         
         //Show Student Response, Attendance State (Marked or Not Marked)
         //TODO: Show Alert is User Entered Wrong PIN and Give option to enter pin!
-        
-//        guard let dbRef = self.realmManager.realm else{
-//            return
-//        }
-//
-//        let course = dbRef.objects(CourseDBModel.self).filter{ $0.serviceUUID == "759aabaf-1ffa-4e7b-b511-1dd267e066b3"}[0]
-//        do{
-//            try dbRef.write {
-//                let attendance = ClassAttendanceDBModel()
-//                let record = StudentRecordDBModel()
-//
-//                record.isPresent = response.markedAttendance
-//                record.email = "20bec043@iiitdmj.ac.in" //TODO: Fetch from DB
-//                record.logStatus = response.markedAttendance ? "Marked Successfully" : "Wrong PIN" //TODO: progress description?
-//                record.timeOfAttendane = Date.now
-//
-//                attendance.attendanceRecord.append(record)
-//                attendance.date = Date.now
-//
-//                course.courseAttendance.append(attendance)
-//            }
-//        }catch(let e){
-//            print(e)
-//            print("Error While Saving Record!")
-//        }
     }
     
 //    func broadcastingServiceProgressDescription(_ description: String) {
@@ -192,7 +202,7 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     
     func didStopBroadcasting() {
         self.isBroadcasting = false
-        self.attendanceCompleted = true //MARK: -Attendance is Marked
+        self.attendanceProcessCompleted = true
     }
     
     func didUpdateState(newState: String) {
@@ -204,9 +214,8 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     }
     
     func didUnSubcribedTeacherDevice() {
-        //TODO: Stop Broadcasting..
+        //TODO: Stop Broadcasting & Stop Sending Data
         self.stopSending()
-//        self.attendanceCompleted = true //MARK: -Attendance is Marked
         self.broadcastingService.stopBroadcasting()
     }
 }

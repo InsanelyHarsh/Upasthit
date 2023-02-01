@@ -34,6 +34,8 @@ struct AttendanceDetailView: View {
         
             HStack{
                 Button {
+                    self.attendanceDetailVM.attendanceProcessCompleted = false
+                    self.attendanceDetailVM.attendanceMarkedSucessfully = false
                     self.attendanceDetailVM.startBroadcasting()
                 } label: {
                     Text("Start Attendance")
@@ -58,8 +60,9 @@ struct AttendanceDetailView: View {
         }, message: {
             Text(self.attendanceDetailVM.alertType.alertDescription)
         })
-        .onChange(of: self.attendanceDetailVM.attendanceCompleted) { newValue in
-            if(newValue){
+
+        .onChange(of: self.attendanceDetailVM.attendanceMarkedSucessfully) { newValue in
+            if(newValue && self.attendanceDetailVM.attendanceProcessCompleted){
                 self.attendanceMarkedAction()
             }
         }
