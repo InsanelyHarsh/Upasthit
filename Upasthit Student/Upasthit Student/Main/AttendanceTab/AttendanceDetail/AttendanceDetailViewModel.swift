@@ -172,7 +172,7 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     //If recieved Response then Send Data Again with confirmationResponse => True
     func didReviceResponse(_ response: ScannedServiceDataModel) {
         //Save Response to DB
-        saveAttendanceRecord(responseData: response)
+//        saveAttendanceRecord(responseData: response)
         
         //Send Confirmation Response, until Disconected
         if(response.markedAttendance == false){
