@@ -30,6 +30,7 @@ class AttendanceDetailViewModel:ObservableObject{
     
     var cancellable=Set<AnyCancellable>()
     
+    
     private var studentRollNumber:String{
         get{
 //            return self.realmManager.fetchData(StudentDBModel.self).map{ $0.rollNumber}[0]
@@ -53,6 +54,8 @@ class AttendanceDetailViewModel:ObservableObject{
     init(){
         self.broadcastingService.delegate = self
         self.updateProgress()
+        
+        self.getBluetoothState()
     }
     
     //TODO: Broadcast to all the Teacher (or) Ask Student, specific course and mark attendance
@@ -72,17 +75,23 @@ class AttendanceDetailViewModel:ObservableObject{
     
     ///Current process description
     ///Shows Alert when any thing goes wrong
-    func updateProgress(){
+    private func updateProgress(){
         self.broadcastingService.progressDescription = { [weak self] progress in
             switch progress{
             case .success(let success):
                 self?.progressDescription = success.rawValue
             case .failure(let error):
-//                self?.alertMessage = error.rawValue //TODO: Fix this error
                 self?.alertType = error 
                 self?.showAlert = true
             }
         }
+    }
+    
+    private func getBluetoothState(){
+        self.broadcastingService.broadcastingServiceBluetoothState.sink { [weak self] state in
+            self?.bluetoothState = state
+        }
+        .store(in: &cancellable)
     }
     
     ///Sends Data every 1 second, time could to changed
@@ -219,9 +228,9 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
         self.attendanceProcessCompleted = true
     }
     
-    func didUpdateState(newState: String) {
-        self.bluetoothState = newState
-    }
+//    func didUpdateState(newState: String) {
+//        self.bluetoothState = newState
+//    }
     
     func didSubcribedTeacherDevice() {
 //        sendData(confrimationResponse: false)

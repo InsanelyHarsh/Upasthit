@@ -13,7 +13,7 @@ protocol BroadcastingServiceDelegate{
     
     func didStopBroadcasting() //
     
-    func didUpdateState(newState:String) //
+//    func didUpdateState(newState:String) //
     
     func didSubcribedTeacherDevice() //
     func didUnSubcribedTeacherDevice()

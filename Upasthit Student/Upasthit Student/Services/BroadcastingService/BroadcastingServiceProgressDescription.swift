@@ -26,6 +26,9 @@ enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
     case bluetoothIsTurnedOff
     case readingResponseFailed
     case broadcastingError
+    case encodingFailed
+    case decodingFailed
+    
     
     var alertTitle: String{
         switch self {
@@ -34,6 +37,10 @@ enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
         case .readingResponseFailed:
             return "Error"
         case .broadcastingError:
+            return "Error"
+        case .encodingFailed:
+            return "Error"
+        case .decodingFailed:
             return "Error"
         }
     }
@@ -46,6 +53,10 @@ enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
             return "Error Occured while Broadcasting, Please try Again. ⚠️ \n Contact Developer."
         case .readingResponseFailed:
             return "Unable to Read Response. \n Please Try Again."
+        case .encodingFailed:
+            return "Encoding Failed, Please Try Again"
+        case .decodingFailed:
+            return "Decoding Failed, Please Try Again"
         }
     }
 }

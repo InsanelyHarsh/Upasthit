@@ -71,6 +71,7 @@
 		B0107BF92987E17D00D9BADB /* AttendanceDetailAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */; };
 		B0107BFB2987ED7300D9BADB /* EnrolledStudentDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */; };
 		B0107BFD2988015D00D9BADB /* GetStudentDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0107BFC2988015D00D9BADB /* GetStudentDetailModel.swift */; };
+		B080271E299DF408008D5393 /* BroadcastingServiceStateDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B080271D299DF408008D5393 /* BroadcastingServiceStateDescription.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +138,7 @@
 		B0107BF82987E17D00D9BADB /* AttendanceDetailAlertError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceDetailAlertError.swift; sourceTree = "<group>"; };
 		B0107BFA2987ED7300D9BADB /* EnrolledStudentDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolledStudentDBModel.swift; sourceTree = "<group>"; };
 		B0107BFC2988015D00D9BADB /* GetStudentDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStudentDetailModel.swift; sourceTree = "<group>"; };
+		B080271D299DF408008D5393 /* BroadcastingServiceStateDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastingServiceStateDescription.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,6 +419,7 @@
 			children = (
 				B0107BE62984D32600D9BADB /* Scanned.swift */,
 				B0107BE82984D33000D9BADB /* Broadcasted.swift */,
+				B080271D299DF408008D5393 /* BroadcastingServiceStateDescription.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -558,6 +561,7 @@
 				B0107BA82984CAC300D9BADB /* Divider.swift in Sources */,
 				B0107BF92987E17D00D9BADB /* AttendanceDetailAlertError.swift in Sources */,
 				B0107BE92984D33000D9BADB /* Broadcasted.swift in Sources */,
+				B080271E299DF408008D5393 /* BroadcastingServiceStateDescription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,8 @@ class BroadcastingService:NSObject{
     var progressDescription:((Result<BroadcastingServiceProgressDescription,BroadcastingServiceErrorDescription>)->Void)?
     var delegate:BroadcastingServiceDelegate?
     
+    var broadcastingServiceBluetoothState:CurrentValueSubject<String,Never> = CurrentValueSubject<String,Never>("Idle")
+    
     override init(){
         super.init()
         self.scannedDeviceManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -32,9 +34,9 @@ class BroadcastingService:NSObject{
     
     //MARK: - Start Broadcasting & Stop Broadcasting
     
-    //Start Broadcasting
-    ///This function starts BLE Broadcasting. By default it broadcast  [Constants.SERVICE_UUID]
-    ///Roll Number is the name of Device
+    ///Start Broadcasting
+    ///- This function starts BLE Broadcasting. By default it broadcast  [Constants.SERVICE_UUID]
+    ///- Roll Number is the name of Device
     func startBroadcasting(of services:[CBUUID] = [Constants.SERVICE_UUID],rollNumber:String){ //MARK: roll works and Broadcasting Name!
         if(!self.scannedDeviceManager.isAdvertising){
             
@@ -78,7 +80,7 @@ extension BroadcastingService{
     func sendData(data dataBroadcasted:BroadcastedDataModel){
         //Encoding Data
         guard let encodedBroadcastData = encodeData(dataBroadcasted) else{
-            self.progressDescription?(.failure(.broadcastingError)) //TODO: More Clear Msg
+            self.progressDescription?(.failure(.encodingFailed))
             return
         }
         
@@ -100,23 +102,8 @@ extension BroadcastingService:CBPeripheralManagerDelegate{
     //Did Update State
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         self.progressDescription?(.success(.bleStateUpdated))
-        switch peripheral.state{
-        case .unknown:
-            self.delegate?.didUpdateState(newState: "Unknown State")
-        case .resetting:
-            self.delegate?.didUpdateState(newState: "Resetting Peripheral State")
-        case .unsupported:
-            self.delegate?.didUpdateState(newState: "UnSupported State")
-        case .unauthorized:
-            self.delegate?.didUpdateState(newState: "Unauthorized State")
-        case .poweredOff:
-            self.delegate?.didUpdateState(newState: "Powered Off State")
-        case .poweredOn:
-            self.delegate?.didUpdateState(newState: "Bluetooth State has been Updated. Ready to Broadcast ✅")
-            self.delegate?.isReadytoStartBroadcasting()
-        @unknown default:
-            self.delegate?.didUpdateState(newState: "Unknown State")
-        }
+        
+        self.broadcastingServiceBluetoothState.send(BroadcastingServiceStateDescription(rawValue: peripheral.state.rawValue)!.stateDescription)
     }
 
     
