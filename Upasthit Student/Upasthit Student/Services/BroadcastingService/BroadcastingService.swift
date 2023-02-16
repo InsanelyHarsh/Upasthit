@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreBluetooth
+import Combine
+
 /*
  >> Subcribed to 7D85B16C-D99D-EFE2-2AEE-48C2DAF3C073
  >> Subcribed to E763C3B5-21F6-E269-6589-AE0505B4EDDF
@@ -21,8 +23,6 @@ class BroadcastingService:NSObject{
     
     var progressDescription:((Result<BroadcastingServiceProgressDescription,BroadcastingServiceErrorDescription>)->Void)?
     var delegate:BroadcastingServiceDelegate?
-    
-    
     
     override init(){
         super.init()
@@ -84,6 +84,7 @@ extension BroadcastingService{
         
         //Sending Updated Data
 //        self.scannedDeviceManager.updateValue(encodedBroadcastData, for: characteristic, onSubscribedCentrals: centrals)
+        
         
         self.scannedDeviceManager.updateValue(encodedBroadcastData, for: self.charactertic!, onSubscribedCentrals: self.subscribedCentrals)
         

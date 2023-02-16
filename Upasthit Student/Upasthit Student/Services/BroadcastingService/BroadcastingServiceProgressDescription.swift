@@ -22,8 +22,6 @@ enum BroadcastingServiceProgressDescription:String{
 }
 
 
-
-
 enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
     case bluetoothIsTurnedOff
     case readingResponseFailed
@@ -50,5 +48,4 @@ enum BroadcastingServiceErrorDescription:Error,CustomErrorAlertProtocol{
             return "Unable to Read Response. \n Please Try Again."
         }
     }
-    
 }

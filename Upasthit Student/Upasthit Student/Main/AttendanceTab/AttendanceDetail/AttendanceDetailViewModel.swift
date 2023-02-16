@@ -87,7 +87,7 @@ class AttendanceDetailViewModel:ObservableObject{
     
     ///Sends Data every 1 second, time could to changed
     var count = 0
-    func sendData(_ interval:Double=2,confrimationResponse:Bool){
+    func sendData(_ interval:Double=3,confrimationResponse:Bool){
         print("Sending Data: \(count)")
         count += 1
         if(confrimationResponse){
@@ -103,6 +103,7 @@ class AttendanceDetailViewModel:ObservableObject{
         }else{
             if(self.didStudentEnterPIN){
                 print("Broadcasting Data ☢️ with Confrimation Respone 🍬")
+                
                 self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
                                                                              rollNumber: self.studentRollNumber,
                                                                              pin: self.attendancePIN, confirmationResponse: true))
@@ -182,7 +183,20 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
             self.attendanceMarkedSucessfully = true
         }
         
-        self.sendData(confrimationResponse: true)
+        
+        
+        //MARK: - Change Here
+        self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
+                                                                     rollNumber: self.studentRollNumber,
+                                                                     pin: self.attendancePIN, confirmationResponse: true))
+        
+//        self.sendData(confrimationResponse: true)
+        
+        
+        
+        
+        
+        
         
         //Show Student Response, Attendance State (Marked or Not Marked)
         //TODO: Show Alert is User Entered Wrong PIN and Give option to enter pin!
@@ -210,7 +224,12 @@ extension AttendanceDetailViewModel:BroadcastingServiceDelegate{
     }
     
     func didSubcribedTeacherDevice() {
-        sendData(confrimationResponse: false)
+//        sendData(confrimationResponse: false)
+        
+        self.broadcastingService.sendData(data: BroadcastedDataModel(studentName: self.studentName,
+                                                                     rollNumber: self.studentRollNumber,
+                                                                     pin: self.attendancePIN, confirmationResponse: false))
+        
     }
     
     func didUnSubcribedTeacherDevice() {

@@ -17,7 +17,7 @@ protocol RealmManagerDelegate{
 }
 
 final class RealmManager{
-//    let app:App
+//    let   harsapp:App
     var user:User?
     var config:Realm.Configuration?
     var realm:Realm?
